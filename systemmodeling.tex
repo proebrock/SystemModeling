@@ -114,10 +114,10 @@ with $\omega_0$ the angular frequency of the undamped oscillator in $\unitfrac{1
 
 From the circuit diagram of a series RLC circuit (see \FigRef{elecoscil}) with an electrical resistance $R$ in $\unit{\Omega}=\unitfrac{V}{A}$, an inductance $L$ in $\unit{H}=\unitfrac{V\,s}{A}$ and a capacitance $C$ in $\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
 \begin{eqnarray}
-U_{In}(t)&=&L\,{{di(t)}\over{dt}}+R\,i(t)+U_{Out}(t)\\
-U_{Out}(t)&=&{1\over{C}}\int i(t)dt\quad\Leftrightarrow\quad i(t)=C\,{dU_{Out}(t)\over{dt}},\,{{di(t)}\over{dt}}=C\,{d^2U_{Out}(t)\over{dt^2}}\\
-U_{In}(t)&=&L\,C\,{d^2U_{Out}(t)\over{dt^2}}+R\,C\,{dU_{Out}(t)\over{dt}}+U_{Out}\\
-{1\over{L\,C}}\,U_{In}(t)&=&{d^2U_{Out}(t)\over{dt^2}}+{R\over{L}}\,{dU_{Out}(t)\over{dt}}+{1\over{L\,C}}\,U_{Out}\\
+U_{In}(t)&=&L\,\frac{di(t)}{dt}+R\,i(t)+U_{Out}(t)\\
+U_{Out}(t)&=&\frac{1}{C}\int i(t)dt\quad\Leftrightarrow\quad i(t)=C\,\frac{dU_{Out}(t)}{dt},\,\frac{di(t)}{dt}=C\,\frac{d^2U_{Out}(t)}{dt^2}\\
+U_{In}(t)&=&L\,C\,\frac{d^2U_{Out}(t)}{dt^2}+R\,C\,\frac{dU_{Out}(t)}{dt}+U_{Out}\\
+\frac{1}{L\,C}\,U_{In}(t)&=&\frac{d^2U_{Out}(t)}{dt^2}+\frac{R}{L}\,\frac{dU_{Out}(t)}{dt}+\frac{1}{L\,C}\,U_{Out}\\
 \end{eqnarray}
 
 \Fig{elecoscil}{0.5}{RLC circuit}
@@ -131,8 +131,8 @@ With $u=U_{In}$ being the driving voltage in $\unit{V}$ and $y=U_{Out}$ represen
 
 From the setup of a damped spring mass system (see \FigRef{mechoscil}) with a mass $m$ in $\unit{kg}$, a spring constant $k$ in $\unitfrac{N}{m}$ and a viscous damping coefficient $c$ in $\unitfrac{N\cdot s}{m}$ we can derive:
 \begin{eqnarray}
-F(t)&=&m\,{{d^2p(t)}\over{dt^2}}+c\,{{dp(t)}\over{dt}}+k\,p(t)\\
-{1\over{m}}\,F(t)&=&{{d^2p(t)}\over{dt^2}}+{c\over{m}}\,{{dp(t)}\over{dt}}+{k\over{m}}\,p(t)\\
+F(t)&=&m\,\frac{d^2p(t)}{dt^2}+c\,\frac{dp(t)}{dt}+k\,p(t)\\
+\frac{1}{m}\,F(t)&=&\frac{d^2p(t)}{dt^2}+\frac{c}{m}\,\frac{dp(t)}{dt}+\frac{k}{m}\,p(t)\\
 \end{eqnarray}
 
 \Fig{mechoscil}{0.5}{Damped spring-mass system}
@@ -204,20 +204,20 @@ h(t)=\mathcal{L}^{-1}\left\{G(s)\right\}
 \end{equation}
 For the step response $a(t)$ of a system under the input of a unit step function $H(t)$ we get
 \begin{equation}
-a(t)=\mathcal{L}^{-1}\left\{{G(s)}\over{s}\right\}
+a(t)=\mathcal{L}^{-1}\left\{\frac{G(s)}{s}\right\}
 \end{equation}
 
 For the harmonic oscillator (Example A, \SRef{examplea}) and for $\zeta=0$ (undamped) we get
 \begin{eqnarray}
 G(s)&=&\frac{\beta}{s^2+\omega_0^2}\\
-h(t)&=&{{\beta}\over{\omega_0}}\,\sin(\omega_0\,t)\\
-a(t)&=&{{\beta}\over{\omega_0^2}}\left(1-\cos(\omega_0\,t)\right)
+h(t)&=&\frac{\beta}{\omega_0}\,\sin(\omega_0\,t)\\
+a(t)&=&\frac{\beta}{\omega_0^2}\left(1-\cos(\omega_0\,t)\right)
 \end{eqnarray}
 and for $\zeta=1$ (critically damped) we get
 \begin{eqnarray}
 G(s)&=&\frac{\beta}{s^2+2\,\omega_0\,s+\omega_0^2}\\
 h(t)&=&\beta\,t\,e^{-\omega_0\,t}\\
-a(t)&=&{{\beta}\over{\omega_0^2}}\,\left(1-\left(1+t\,\omega_0\right)\,e^{-\omega_0\,t}\right)
+a(t)&=&\frac{\beta}{\omega_0^2}\,\left(1-\left(1+t\,\omega_0\right)\,e^{-\omega_0\,t}\right)
 \end{eqnarray}
 Impulse and step responses are important as basic properties of a system. On the other way around it is possible to identify an unknown system by applying a step to its input and observe the output.
 
