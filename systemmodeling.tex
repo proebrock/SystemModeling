@@ -1,0 +1,231 @@
+\documentclass[a4paper,12pt]{article}
+
+% Includes
+\usepackage{epsfig}
+\usepackage{amsfonts}    
+\usepackage{amssymb}
+\usepackage{color}
+\usepackage{colortbl}
+\usepackage{amsmath}
+\usepackage[pdftex,bookmarks=true,pdfauthor={Philipp Roebrock},pdftitle={System Modeling}]{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{lscape}
+\usepackage{units}
+\usepackage{rotating}
+\usepackage{trsym}
+
+
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% Document's margins
+\topmargin -1.5cm
+\oddsidemargin -0.04cm
+\evensidemargin -0.04cm
+\textwidth 16.59cm
+\textheight 25.5cm 
+\parindent 0cm
+
+%
+% Include floating table
+%
+\newcommand{\TabStart}[1]{%
+\begin{table}[htb]%
+\begin{center}%
+\begin{tabular}{#1}%
+}
+\newcommand{\TabEnd}[2]{%
+\end{tabular}%
+\end{center}%
+\caption{#2\label{tab:#1}}%
+\end{table}%
+}
+\newcommand{\TabRef}[1]{Table \ref{tab:#1}}
+
+%
+% Include floating plot
+%
+\newcommand{\Plot}[3]{%
+\begin{figure}[htb]%
+\begin{center}%
+\resizebox{#2\textwidth}{!}{\input{#1.tex}}%
+\end{center}%
+\vspace{-5ex}%
+\caption{#3\label{plot:#1}}%
+\end{figure}%
+}
+\newcommand{\PlotRef}[1]{Figure \ref{plot:#1}}
+
+%
+% Include floating figure
+%
+\newcommand{\Fig}[4]{%
+\begin{figure}[htb]%
+\begin{center}%
+\includegraphics[width=#2\textwidth]{#1.pdf}%
+\end{center}%
+\caption{#3\label{fig:#1}}%
+\end{figure}%
+}
+\newcommand{\FigRef}[1]{Figure \ref{fig:#1}}
+
+% Quotation marks
+\newcommand{\Q}[1]{``{#1}''}
+
+% Vectors and matrices
+\renewcommand{\Vec}[1]{{\bf #1}}
+\newcommand{\Mat}[1]{\mathbf{#1}}
+
+\newcommand{\pfrac}[2]{\frac{#1}{#2}}
+
+% Label and reference for chapters, sections, ...
+\newcommand{\Chapter}[2]{\chapter{#2}\label{chapter:#1}}
+\newcommand{\CRef}[1]{Chapter \ref{chapter:#1}}
+\newcommand{\Section}[2]{\section{#2}\label{section:#1}}
+\newcommand{\SRef}[1]{Section \ref{section:#1}}
+\newcommand{\SubSection}[2]{\subsection{#2}\label{subsection:#1}}
+\newcommand{\SSRef}[1]{Section \ref{subsection:#1}}
+\newcommand{\SubSubSection}[2]{\subsubsection{#2}\label{subsubsection:#1}}
+\newcommand{\SSSRef}[1]{Section \ref{subsubsection:#1}}
+
+
+
+\begin{document}
+
+\vspace{1.5cm}
+\begin{center}
+{\Huge System Modeling}\\[3ex]
+Philipp Roebrock\\[1ex]
+Jan 18, 2012\\
+\end{center}
+\vspace{1cm}
+
+
+
+\Section{examplea}{Example A: Harmonic oscillator}
+
+The differential equation of the driven damped harmonic oscillator is
+\begin{equation}
+\ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)=\beta\,u(t)
+\end{equation}
+with $\omega_0$ the angular frequency of the undamped oscillator in $\unitfrac{1}{s}$, $\zeta$ the damping ratio (no unit) and $\beta$ a conversion constant.\\
+
+\SubSection{exampleaelec}{Electrical oscillator}
+
+From the circuit diagram of a series RLC circuit (see \FigRef{elecoscil}) with an electrical resistance $R$ in $\unit{\Omega}=\unitfrac{V}{A}$, an inductance $L$ in $\unit{H}=\unitfrac{V\,s}{A}$ and a capacitance $C$ in $\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
+\begin{eqnarray}
+U_{In}(t)&=&L\,{{di(t)}\over{dt}}+R\,i(t)+U_{Out}(t)\\
+U_{Out}(t)&=&{1\over{C}}\int i(t)dt\quad\Leftrightarrow\quad i(t)=C\,{dU_{Out}(t)\over{dt}},\,{{di(t)}\over{dt}}=C\,{d^2U_{Out}(t)\over{dt^2}}\\
+U_{In}(t)&=&L\,C\,{d^2U_{Out}(t)\over{dt^2}}+R\,C\,{dU_{Out}(t)\over{dt}}+U_{Out}\\
+{1\over{L\,C}}\,U_{In}(t)&=&{d^2U_{Out}(t)\over{dt^2}}+{R\over{L}}\,{dU_{Out}(t)\over{dt}}+{1\over{L\,C}}\,U_{Out}\\
+\end{eqnarray}
+
+\Fig{elecoscil}{0.5}{RLC circuit}
+
+With $u=U_{In}$ being the driving voltage in $\unit{V}$ and $y=U_{Out}$ representing internal state and output voltage in $\unit{V}$, we get
+\begin{equation}
+\omega_0^2=\pfrac{1}{L\,C},\quad2\,\zeta\,\omega_0=\pfrac{R}{L},\quad\beta=\pfrac{1}{L\,C}
+\end{equation}
+
+\SubSection{exampleamech}{Mechanical oscillator}
+
+From the setup of a damped spring mass system (see \FigRef{mechoscil}) with a mass $m$ in $\unit{kg}$, a spring constant $k$ in $\unitfrac{N}{m}$ and a viscous damping coefficient $c$ in $\unitfrac{N\cdot s}{m}$ we can derive:
+\begin{eqnarray}
+F(t)&=&m\,{{d^2p(t)}\over{dt^2}}+c\,{{dp(t)}\over{dt}}+k\,p(t)\\
+{1\over{m}}\,F(t)&=&{{d^2p(t)}\over{dt^2}}+{c\over{m}}\,{{dp(t)}\over{dt}}+{k\over{m}}\,p(t)\\
+\end{eqnarray}
+
+\Fig{mechoscil}{0.5}{Damped spring-mass system}
+
+With $u=F$ being the driving force in $\unit{N}$ and $y=p$ representing internal state and position in $\unit{m}$, we get
+\begin{equation}
+\omega_0^2=\pfrac{k}{m},\quad2\,\zeta\,\omega_0=\pfrac{c}{m},\quad\beta=\pfrac{1}{m}
+\end{equation}
+
+\Section{xferfun}{Transfer function}
+
+To get the transfer function $G(s)$ of a system we Laplace-transform the differential equation and solve for 
+\begin{equation}
+G(s)=\frac{y(s)}{u(s)}
+\end{equation}
+For the harmonic oscillator (Example A, \SRef{examplea}) we get:
+\begin{eqnarray}
+\ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)&=&\beta\,u(t)\\
+&\TransformVert&\nonumber\\
+s^2\,y(s)+2\,\zeta\,\omega_0\,s\,y(s)+\omega_0^2\,y(s)&=&\beta\,u(s)\\
+G(s)&=&\frac{\beta}{s^2+2\,\zeta\,\omega_0\,s+\omega_0^2}
+\end{eqnarray}
+
+\Section{lsystem}{State space notation for linear systems}
+
+For a given linear system with $p\in\mathbb{N}$ inputs, $q\in\mathbb{N}$ outputs and $n\in\mathbb{N}$ states, the system can be described by a set of equations:
+\begin{eqnarray}
+\Vec{\dot{x}}(t)&=&\Mat{A}(t)\,\Vec{x}(t)+\Mat{B}(t)\,\Vec{u}(t)\\
+\Vec{y}(t)&=&\Mat{C}(t)\,\Vec{x}(t)+\Mat{D}(t)\,\Vec{u}(t)
+\end{eqnarray}
+where $\Vec{u}(t)\in\mathbb{R}^p$ is the {\em input vector}, $\Vec{y}(t)\in\mathbb{R}^q$ the {\em output vector} and $\Vec{x}\in\mathbb{R}^n$ the {\em state vector}. The matrix $\Mat{A}$ with $\dim(\Mat{A})=n\times n$ is the {\em state matrix}, $\Mat{B}$ with $\dim(\Mat{B})=n\times p$ is the {\em input matrix}, $\Mat{C}$ with $\dim(\Mat{C})=q\times n$ is the {\em output matrix}, $\Mat{D}$ with $\dim(\Mat{D})=q\times p$ is the {\em feedthrough matrix}. To see the block diagram representation of the state space equation, we refer to \FigRef{statespace}.\\
+
+\Fig{statespace}{0.8}{State space notation shown as block diagram}
+
+To write the equation of the harmonic oscillator (Example A, \SRef{examplea}) in the state space notation, we do a transformation by setting $x_1(t):=y(t)$ and $x_2(t):=\dot{y}(t)$. This gives:
+\begin{eqnarray}
+	\dot{x_1}(t)&=&x_2(t)\\
+	\dot{x_2}(t)&=&-2\,\zeta\,\omega_0\,x_2(t)-\omega_0^2\,x_1(t)+\beta\,u(t)
+\end{eqnarray}
+and written in matrix notation
+\begin{equation}
+\Vec{\dot{x}}(t)=\left(\begin{array}{cc}0 & 1\\-\omega_0^2 & -2\,\zeta\,\omega_0\end{array}\right)\,\Vec{x}(t)+\left(\begin{array}{c}0\\\beta\end{array}\right)\,u(t)
+\end{equation}
+Therefore we get with $p=1$, $q=1$ and $n=2$:
+\begin{equation}
+\begin{array}{ll}
+	\Mat{A}=\left(\begin{array}{cc}
+		0 & 1\\
+		-\omega_0^2 & -2\,\zeta\,\omega_0
+	\end{array}\right) &
+	\Mat{B}=\left(\begin{array}{c}
+		0\\
+		\beta
+	\end{array}\right)\\[4ex]
+	\Mat{C}=\left(\begin{array}{cc}
+		1 & 0
+	\end{array}\right) &
+	\Mat{D}=\left(\begin{array}{c}
+		0
+	\end{array}\right)\\
+\end{array}
+\end{equation}
+
+\Section{impulsestep}{Impulse and step responses}
+
+To determine the impulse response $h(t)$ of a system under the input of a dirac impulse $\delta(t)$ we can use the inverse Laplace transformation of the transfer function:
+\begin{equation}
+h(t)=\mathcal{L}^{-1}\left\{G(s)\right\}
+\end{equation}
+For the step response $a(t)$ of a system under the input of a unit step function $H(t)$ we get
+\begin{equation}
+a(t)=\mathcal{L}^{-1}\left\{{G(s)}\over{s}\right\}
+\end{equation}
+
+For the harmonic oscillator (Example A, \SRef{examplea}) and for $\zeta=0$ (undamped) we get
+\begin{eqnarray}
+G(s)&=&\frac{\beta}{s^2+\omega_0^2}\\
+h(t)&=&{{\beta}\over{\omega_0}}\,\sin(\omega_0\,t)\\
+a(t)&=&{{\beta}\over{\omega_0^2}}\left(1-\cos(\omega_0\,t)\right)
+\end{eqnarray}
+and for $\zeta=1$ (critically damped) we get
+\begin{eqnarray}
+G(s)&=&\frac{\beta}{s^2+2\,\omega_0\,s+\omega_0^2}\\
+h(t)&=&\beta\,t\,e^{-\omega_0\,t}\\
+a(t)&=&{{\beta}\over{\omega_0^2}}\,\left(1-\left(1+t\,\omega_0\right)\,e^{-\omega_0\,t}\right)
+\end{eqnarray}
+Impulse and step responses are important as basic properties of a system. On the other way around it is possible to identify an unknown system by applying a step to its input and observe the output.
+
+\Section{simu}{Simulation}
+
+% analytical solution
+% direct simulation, explaining ODE solver; python scipy simulation
+% system identification
+
+\end{document}
+
