@@ -87,6 +87,8 @@
 \newcommand{\SSRef}[1]{Section \ref{subsection:#1}}
 \newcommand{\SubSubSection}[2]{\subsubsection{#2}\label{subsubsection:#1}}
 \newcommand{\SSSRef}[1]{Section \ref{subsubsection:#1}}
+\newcommand{\ELabel}[1]{\label{equation:#1}}
+\newcommand{\ERef}[1]{(\ref{equation:#1})}
 
 
 
@@ -96,23 +98,166 @@
 \begin{center}
 {\Huge System Modeling}\\[3ex]
 Philipp Roebrock\\[1ex]
-Jan 18, 2012\\
+\today\\
 \end{center}
 \vspace{1cm}
 
 
 
-\Section{examplea}{Example A: Harmonic oscillator}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\Section{theory}{Theory}
+
+% System categories: Linear, time-invariant, continous-time
+
+\SubSection{diffeq}{Differential equation}
+
+Let the system be described by an $n$-th order {\em ordinary differential equation} ({\em ODE}):
+\begin{eqnarray}
+a_{n}\,\frac{d^{n}y(t)}{dt^{n}}&+&a_{n-1}\,\frac{d^{n-1}y(t)}{dt^{n-1}}+\ldots+a_{1}\,\frac{dy(t)}{dt}+a_{0}\,y(t)=\nonumber\\
+b_{n}\,\frac{d^{n}u(t)}{dt^{n}}&+&b_{n-1}\,\frac{d^{n-1}u(t)}{dt^{n-1}}+\ldots+b_{1}\,\frac{du(t)}{dt}+b_{0}\,u(t)
+\end{eqnarray}
+Or in a more compact notation:
+\begin{eqnarray}
+\ELabel{ode}
+a_{n}\,y^{(n)}(t)&+&a_{n-1}\,y^{(n-1)}(t)+\ldots+a_{1}\,\dot{y}(t)+a_{0}\,y(t)=\nonumber\\
+b_{n}\,u^{(n)}(t)&+&b_{n-1}\,u^{(n-1)}(t)+\ldots+b_{1}\,\dot{u}(t)+b_{0}\,u(t)
+\end{eqnarray}
+
+\SubSection{xferfunc}{Transfer function}
+
+The bilateral {\em Laplace transformation} of a function $f(t)$ is defined as
+\begin{eqnarray}
+F(s)=\mathcal{L}\left\{f(t)\right\}=\int\limits_{-\infty}^{\infty}f(t)\,e^{-s\,t}\,dt\qquad\forall\,t\geq0
+\end{eqnarray}
+and the back-transformation is given by
+\begin{eqnarray}
+f(t)=\mathcal{L}^{-1}\left\{F(s)\right\}=\frac{1}{2\pi j}\int\limits_{\sigma-j\infty}^{\sigma+j\infty}F(s)\,e^{s\,t}\,ds\qquad\forall\,t\geq0
+\end{eqnarray}
+
+After Laplace-transforming \ERef{ode} we get
+\begin{eqnarray}
+\ELabel{xfer}
+a_{n}\,s^{n}\,y(s)&+&a_{n-1}\,s^{n-1}\,y(s)+\ldots+a_{1}\,s\,y(s)+a_{0}\,y(s)=\nonumber\\
+b_{n}\,s^{n}\,u(s)&+&b_{n-1}\,s^{n-1}\,u(s)+\ldots+b_{1}\,s\,u(s)+b_{0}\,u(s)
+\end{eqnarray}
+
+The transfer function $G(s)$ is defined as
+\begin{equation}
+G(s):=\frac{y(s)}{u(s)}=\frac{b_{n}\,s^{n}+b_{n-1}\,s^{n-1}+\ldots+b_{1}\,s+b_{0}}{a_{n}\,s^{n}+a_{n-1}\,s^{n-1}+\ldots+a_{1}\,s+a_{0}}
+\end{equation}
+
+\SubSection{sspace}{State space representation}
+
+For a given linear system with $p\in\mathbb{N}$ inputs, $q\in\mathbb{N}$
+outputs and $n\in\mathbb{N}$ states, the system can be described by a set
+of equations:
+\begin{eqnarray}
+\Vec{\dot{x}}(t)&=&\Mat{A}(t)\,\Vec{x}(t)+\Mat{B}(t)\,\Vec{u}(t)\\
+\Vec{y}(t)&=&\Mat{C}(t)\,\Vec{x}(t)+\Mat{D}(t)\,\Vec{u}(t)
+\end{eqnarray}
+where $\Vec{u}(t)\in\mathbb{R}^p$ is the {\em input vector},
+$\Vec{y}(t)\in\mathbb{R}^q$ the {\em output vector} and $\Vec{x}\in\mathbb{R}^n$
+the {\em state vector}. The matrix $\Mat{A}$ with $\dim(\Mat{A})=n\times n$ is
+the {\em state matrix}, $\Mat{B}$ with $\dim(\Mat{B})=n\times p$ is the
+{\em input matrix}, $\Mat{C}$ with $\dim(\Mat{C})=q\times n$ is the
+{\em output matrix}, $\Mat{D}$ with $\dim(\Mat{D})=q\times p$ is the
+{\em feedthrough matrix}.\\
+
+Typically we deal with {\em linear time invariant systems} ({\em LTI}) with 
+$\Mat{A}$, $\Mat{B}$, $\Mat{C}$ and $\Mat{D}$ independent on $t$:
+\begin{eqnarray}
+\Vec{\dot{x}}(t)&=&\Mat{A}\,\Vec{x}(t)+\Mat{B}\,\Vec{u}(t)\\
+\Vec{y}(t)&=&\Mat{C}\,\Vec{x}(t)+\Mat{D}\,\Vec{u}(t)
+\end{eqnarray}
+
+To see the block diagram representation of the state space equation, we refer
+to \FigRef{statespace}.\\
+
+\Fig{statespace}{0.8}{State space notation shown as block diagram}
+
+For given differential equation like \ERef{ode} or transfer function like
+\ERef{xfer} the state space 
+\begin{equation}
+\begin{array}{ll}
+\Mat{A}=\left(\begin{array}{ccccc}
+0 & 1 & 0 & \cdots & 0\\
+\vdots & \ddots & \ddots & \ddots & \vdots\\
+\vdots & & \ddots & \ddots & 0\\
+0 & \cdots & \cdots & 0 & 1\\
+-a_0 & -a_1 & \cdots & -a_{n-1} & -a_n
+\end{array}\right)
+&
+\Mat{B}=\left(\begin{array}{c}
+0\\
+\vdots\\
+\vdots\\
+0\\
+1
+\end{array}\right)\\
+\Mat{C}=\left(\begin{array}{ccccc}
+b_0 & b_1 & \cdots & b_{n-1} & b_n
+\end{array}\right)
+&
+\Mat{D}=\left(\begin{array}{c}
+0
+\end{array}\right)
+\end{array}
+\end{equation}
+
+For a given state-space representation the transfer function can be calculated
+by
+\begin{equation}
+G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}
+\end{equation}
+
+\SubSection{pulsestep}{Impulse and step response}
+
+To determine the {\em impulse response} $h(t)$ of a system under the input of a
+dirac impulse $\delta(t)$ we can use the inverse Laplace transformation of the
+transfer function:
+\begin{equation}
+h(t)=\mathcal{L}^{-1}\left\{G(s)\right\}
+\end{equation}
+For the {\em step response} $a(t)$ of a system under the input of a unit step
+function $H(t)$ we get
+\begin{equation}
+a(t)=\mathcal{L}^{-1}\left\{\frac{G(s)}{s}\right\}
+\end{equation}
+Impulse and step responses are important as basic properties of a system. On
+the other way around it is possible to identify an unknown system by applying
+a step to its input and observe the output.
+
+\SubSection{simu}{Simulation}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\Section{examples}{Examples}
+
+\SubSection{oscillator}{Example A: Harmonic driven damped oscillator}
+
+\SubSubSection{diffeqA}{Differential equation}
 
 The differential equation of the driven damped harmonic oscillator is
 \begin{equation}
 \ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)=\beta\,u(t)
 \end{equation}
-with $\omega_0$ the angular frequency of the undamped oscillator in $\unitfrac{1}{s}$, $\zeta$ the damping ratio (no unit) and $\beta$ a conversion constant.\\
+with $\omega_0$ the angular frequency of the undamped oscillator in
+$\unitfrac{1}{s}$, $\zeta$ the damping ratio (no unit) and $\beta$ a
+conversion constant.\\
 
-\SubSection{exampleaelec}{Electrical oscillator}
+\paragraph{Electrical oscillator}
 
-From the circuit diagram of a series RLC circuit (see \FigRef{elecoscil}) with an electrical resistance $R$ in $\unit{\Omega}=\unitfrac{V}{A}$, an inductance $L$ in $\unit{H}=\unitfrac{V\,s}{A}$ and a capacitance $C$ in $\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
+From the circuit diagram of a series RLC circuit (see \FigRef{elecoscil}) with
+an electrical resistance $R$ in $\unit{\Omega}=\unitfrac{V}{A}$, an inductance
+$L$ in $\unit{H}=\unitfrac{V\,s}{A}$ and a capacitance $C$ in
+$\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
 \begin{eqnarray}
 U_{In}(t)&=&L\,\frac{di(t)}{dt}+R\,i(t)+U_{Out}(t)\\
 U_{Out}(t)&=&\frac{1}{C}\int i(t)dt\quad\Leftrightarrow\quad i(t)=C\,\frac{dU_{Out}(t)}{dt},\,\frac{di(t)}{dt}=C\,\frac{d^2U_{Out}(t)}{dt^2}\\
@@ -122,14 +267,17 @@ U_{In}(t)&=&L\,C\,\frac{d^2U_{Out}(t)}{dt^2}+R\,C\,\frac{dU_{Out}(t)}{dt}+U_{Out
 
 \Fig{elecoscil}{0.5}{RLC circuit}
 
-With $u=U_{In}$ being the driving voltage in $\unit{V}$ and $y=U_{Out}$ representing internal state and output voltage in $\unit{V}$, we get
+With $u=U_{In}$ being the driving voltage in $\unit{V}$ and $y=U_{Out}$
+representing internal state and output voltage in $\unit{V}$, we get
 \begin{equation}
 \omega_0^2=\pfrac{1}{L\,C},\quad2\,\zeta\,\omega_0=\pfrac{R}{L},\quad\beta=\pfrac{1}{L\,C}
 \end{equation}
 
-\SubSection{exampleamech}{Mechanical oscillator}
+\paragraph{Mechanical oscillator}
 
-From the setup of a damped spring mass system (see \FigRef{mechoscil}) with a mass $m$ in $\unit{kg}$, a spring constant $k$ in $\unitfrac{N}{m}$ and a viscous damping coefficient $c$ in $\unitfrac{N\cdot s}{m}$ we can derive:
+From the setup of a damped spring mass system (see \FigRef{mechoscil}) with a
+mass $m$ in $\unit{kg}$, a spring constant $k$ in $\unitfrac{N}{m}$ and a
+viscous damping coefficient $c$ in $\unitfrac{N\cdot s}{m}$ we can derive:
 \begin{eqnarray}
 F(t)&=&m\,\frac{d^2p(t)}{dt^2}+c\,\frac{dp(t)}{dt}+k\,p(t)\\
 \frac{1}{m}\,F(t)&=&\frac{d^2p(t)}{dt^2}+\frac{c}{m}\,\frac{dp(t)}{dt}+\frac{k}{m}\,p(t)\\
@@ -137,37 +285,27 @@ F(t)&=&m\,\frac{d^2p(t)}{dt^2}+c\,\frac{dp(t)}{dt}+k\,p(t)\\
 
 \Fig{mechoscil}{0.5}{Damped spring-mass system}
 
-With $u=F$ being the driving force in $\unit{N}$ and $y=p$ representing internal state and position in $\unit{m}$, we get
+With $u=F$ being the driving force in $\unit{N}$ and $y=p$ representing
+internal state and position in $\unit{m}$, we get
 \begin{equation}
 \omega_0^2=\pfrac{k}{m},\quad2\,\zeta\,\omega_0=\pfrac{c}{m},\quad\beta=\pfrac{1}{m}
 \end{equation}
 
-\Section{xferfun}{Transfer function}
+% TODO: How does it look like when there is gravitation involved?
 
-To get the transfer function $G(s)$ of a system we Laplace-transform the differential equation and solve for 
-\begin{equation}
-G(s)=\frac{y(s)}{u(s)}
-\end{equation}
-For the harmonic oscillator (Example A, \SRef{examplea}) we get:
+\SubSubSection{xferfuncA}{Transfer function}
+
 \begin{eqnarray}
 \ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)&=&\beta\,u(t)\\
 &\TransformVert&\nonumber\\
 s^2\,y(s)+2\,\zeta\,\omega_0\,s\,y(s)+\omega_0^2\,y(s)&=&\beta\,u(s)\\
-G(s)&=&\frac{\beta}{s^2+2\,\zeta\,\omega_0\,s+\omega_0^2}
+G(s)&=&\frac{y(s)}{u(s)}=\frac{\beta}{s^2+2\,\zeta\,\omega_0\,s+\omega_0^2}
 \end{eqnarray}
 
-\Section{lsystem}{State space notation for linear systems}
+\SubSubSection{sspaceA}{State space representation}
 
-For a given linear system with $p\in\mathbb{N}$ inputs, $q\in\mathbb{N}$ outputs and $n\in\mathbb{N}$ states, the system can be described by a set of equations:
-\begin{eqnarray}
-\Vec{\dot{x}}(t)&=&\Mat{A}(t)\,\Vec{x}(t)+\Mat{B}(t)\,\Vec{u}(t)\\
-\Vec{y}(t)&=&\Mat{C}(t)\,\Vec{x}(t)+\Mat{D}(t)\,\Vec{u}(t)
-\end{eqnarray}
-where $\Vec{u}(t)\in\mathbb{R}^p$ is the {\em input vector}, $\Vec{y}(t)\in\mathbb{R}^q$ the {\em output vector} and $\Vec{x}\in\mathbb{R}^n$ the {\em state vector}. The matrix $\Mat{A}$ with $\dim(\Mat{A})=n\times n$ is the {\em state matrix}, $\Mat{B}$ with $\dim(\Mat{B})=n\times p$ is the {\em input matrix}, $\Mat{C}$ with $\dim(\Mat{C})=q\times n$ is the {\em output matrix}, $\Mat{D}$ with $\dim(\Mat{D})=q\times p$ is the {\em feedthrough matrix}. To see the block diagram representation of the state space equation, we refer to \FigRef{statespace}.\\
-
-\Fig{statespace}{0.8}{State space notation shown as block diagram}
-
-To write the equation of the harmonic oscillator (Example A, \SRef{examplea}) in the state space notation, we do a transformation by setting $x_1(t):=y(t)$ and $x_2(t):=\dot{y}(t)$. This gives:
+We do a transformation by setting $x_1(t):=y(t)$ and $x_2(t):=\dot{y}(t)$. This
+gives:
 \begin{eqnarray}
 	\dot{x_1}(t)&=&x_2(t)\\
 	\dot{x_2}(t)&=&-2\,\zeta\,\omega_0\,x_2(t)-\omega_0^2\,x_1(t)+\beta\,u(t)
@@ -196,18 +334,9 @@ Therefore we get with $p=1$, $q=1$ and $n=2$:
 \end{array}
 \end{equation}
 
-\Section{impulsestep}{Impulse and step responses}
+\SubSubSection{pulsestepA}{Impulse and step response}
 
-To determine the impulse response $h(t)$ of a system under the input of a dirac impulse $\delta(t)$ we can use the inverse Laplace transformation of the transfer function:
-\begin{equation}
-h(t)=\mathcal{L}^{-1}\left\{G(s)\right\}
-\end{equation}
-For the step response $a(t)$ of a system under the input of a unit step function $H(t)$ we get
-\begin{equation}
-a(t)=\mathcal{L}^{-1}\left\{\frac{G(s)}{s}\right\}
-\end{equation}
-
-For the harmonic oscillator (Example A, \SRef{examplea}) and for $\zeta=0$ (undamped) we get
+For $\zeta=0$ (undamped) we get
 \begin{eqnarray}
 G(s)&=&\frac{\beta}{s^2+\omega_0^2}\\
 h(t)&=&\frac{\beta}{\omega_0}\,\sin(\omega_0\,t)\\
@@ -219,9 +348,8 @@ G(s)&=&\frac{\beta}{s^2+2\,\omega_0\,s+\omega_0^2}\\
 h(t)&=&\beta\,t\,e^{-\omega_0\,t}\\
 a(t)&=&\frac{\beta}{\omega_0^2}\,\left(1-\left(1+t\,\omega_0\right)\,e^{-\omega_0\,t}\right)
 \end{eqnarray}
-Impulse and step responses are important as basic properties of a system. On the other way around it is possible to identify an unknown system by applying a step to its input and observe the output.
 
-\Section{simu}{Simulation}
+\SubSubSection{simuA}{Simulation}
 
 % analytical solution
 % direct simulation, explaining ODE solver; python scipy simulation
