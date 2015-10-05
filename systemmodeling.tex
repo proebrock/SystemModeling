@@ -118,13 +118,13 @@ Philipp Roebrock\\[1ex]
 Let the system be described by an $n$-th order {\em ordinary differential equation} ({\em ODE}):
 \begin{eqnarray}
 a_{n}\,\frac{d^{n}y(t)}{dt^{n}}&+&a_{n-1}\,\frac{d^{n-1}y(t)}{dt^{n-1}}+\ldots+a_{1}\,\frac{dy(t)}{dt}+a_{0}\,y(t)=\nonumber\\
-b_{n}\,\frac{d^{n}u(t)}{dt^{n}}&+&b_{n-1}\,\frac{d^{n-1}u(t)}{dt^{n-1}}+\ldots+b_{1}\,\frac{du(t)}{dt}+b_{0}\,u(t)
+b_{m}\,\frac{d^{m}u(t)}{dt^{m}}&+&b_{m-1}\,\frac{d^{m-1}u(t)}{dt^{m-1}}+\ldots+b_{1}\,\frac{du(t)}{dt}+b_{0}\,u(t)
 \end{eqnarray}
 Or in a more compact notation:
 \begin{eqnarray}
 \ELabel{ode}
 a_{n}\,y^{(n)}(t)&+&a_{n-1}\,y^{(n-1)}(t)+\ldots+a_{1}\,\dot{y}(t)+a_{0}\,y(t)=\nonumber\\
-b_{n}\,u^{(n)}(t)&+&b_{n-1}\,u^{(n-1)}(t)+\ldots+b_{1}\,\dot{u}(t)+b_{0}\,u(t)
+b_{m}\,u^{(m)}(t)&+&b_{m-1}\,u^{(m-1)}(t)+\ldots+b_{1}\,\dot{u}(t)+b_{0}\,u(t)
 \end{eqnarray}
 
 \SubSection{xferfunc}{Transfer function}
@@ -142,12 +142,12 @@ After Laplace-transforming \ERef{ode} we get
 \begin{eqnarray}
 \ELabel{xfer}
 a_{n}\,s^{n}\,y(s)&+&a_{n-1}\,s^{n-1}\,y(s)+\ldots+a_{1}\,s\,y(s)+a_{0}\,y(s)=\nonumber\\
-b_{n}\,s^{n}\,u(s)&+&b_{n-1}\,s^{n-1}\,u(s)+\ldots+b_{1}\,s\,u(s)+b_{0}\,u(s)
+b_{m}\,s^{m}\,u(s)&+&b_{m-1}\,s^{m-1}\,u(s)+\ldots+b_{1}\,s\,u(s)+b_{0}\,u(s)
 \end{eqnarray}
 
 The transfer function $G(s)$ is defined as
 \begin{equation}
-G(s):=\frac{y(s)}{u(s)}=\frac{b_{n}\,s^{n}+b_{n-1}\,s^{n-1}+\ldots+b_{1}\,s+b_{0}}{a_{n}\,s^{n}+a_{n-1}\,s^{n-1}+\ldots+a_{1}\,s+a_{0}}
+G(s):=\frac{y(s)}{u(s)}=\frac{b_{m}\,s^{m}+b_{m-1}\,s^{m-1}+\ldots+b_{1}\,s+b_{0}}{a_{n}\,s^{n}+a_{n-1}\,s^{n-1}+\ldots+a_{1}\,s+a_{0}}
 \end{equation}
 
 \SubSection{sspace}{State space representation}
