@@ -123,8 +123,8 @@ b_{m}\,\frac{d^{m}u(t)}{dt^{m}}&+&b_{m-1}\,\frac{d^{m-1}u(t)}{dt^{m-1}}+\ldots+b
 Or in a more compact notation:
 \begin{eqnarray}
 \ELabel{ode}
-a_{n}\,y^{(n)}(t)&+&a_{n-1}\,y^{(n-1)}(t)+\ldots+a_{1}\,\dot{y}(t)+a_{0}\,y(t)=\nonumber\\
-b_{m}\,u^{(m)}(t)&+&b_{m-1}\,u^{(m-1)}(t)+\ldots+b_{1}\,\dot{u}(t)+b_{0}\,u(t)
+a_{n}\,y^{(n)}(t)&+&a_{n-1}\,y^{(n-1)}(t)+\ldots+a_{1}\,y'(t)+a_{0}\,y(t)=\nonumber\\
+b_{m}\,u^{(m)}(t)&+&b_{m-1}\,u^{(m-1)}(t)+\ldots+b_{1}\,u'(t)+b_{0}\,u(t)
 \end{eqnarray}
 
 \SubSection{xferfunc}{Transfer function}
@@ -179,6 +179,8 @@ to \FigRef{statespace}.\\
 
 \Fig{statespace}{0.8}{State space notation shown as block diagram}
 
+\SubSubSection{Canonical form}
+
 For given differential equation like \ERef{ode} or transfer function like
 \ERef{xfer} the state space 
 \begin{equation}
@@ -211,7 +213,7 @@ b_0 & b_1 & \cdots & b_{n-1} & b_n
 For a given state-space representation the transfer function can be calculated
 by
 \begin{equation}
-G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}
+G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}\,B+D
 \end{equation}
 
 \SubSection{pulsestep}{Impulse and step response}
