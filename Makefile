@@ -11,8 +11,8 @@ systemmodeling.pdf: systemmodeling.tex
 
 .PHONY: clean
 clean:
-	rm -f *.aux *.log *.out
+	rm -f *.aux *.log *.out *.pyg
 
 .PHONY: distclean
 distclean:
-	rm -f *.aux *.log *.out systemmodeling.pdf
+	rm -f *.aux *.log *.out *.pyg systemmodeling.pdf

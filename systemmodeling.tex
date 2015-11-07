@@ -14,6 +14,7 @@
 \usepackage{rotating}
 \usepackage{trsym}
 \usepackage{minted}
+\usepackage{newfloat}
 
 
 \setcounter{secnumdepth}{3}
@@ -30,45 +31,64 @@
 %
 % Include floating table
 %
-\newcommand{\TabStart}[1]{%
-\begin{table}[htb]%
-\begin{center}%
-\begin{tabular}{#1}%
-}
-\newcommand{\TabEnd}[2]{%
-\end{tabular}%
-\end{center}%
-\caption{#2\label{tab:#1}}%
-\end{table}%
-}
-\newcommand{\TabRef}[1]{Table \ref{tab:#1}}
-
-%
-% Include floating plot
-%
-\newcommand{\Plot}[3]{%
-\begin{figure}[htb]%
-\begin{center}%
-\resizebox{#2\textwidth}{!}{\input{#1.tex}}%
-\end{center}%
-\vspace{-5ex}%
-\caption{#3\label{plot:#1}}%
-\end{figure}%
-}
-\newcommand{\PlotRef}[1]{Figure \ref{plot:#1}}
+\DeclareFloatingEnvironment[
+	fileext=lor,
+	listname=List of rows,
+	name=Table,
+	placement=htp,
+	]{tabfloat}
+% Temorary variables to allow newenvironment to access parameters from END part
+\newcommand*{\TabLabel}{}
+\newcommand*{\TabCaption}{}
+\newenvironment{tab}[3]% {format}{label}{caption}
+	% BEGIN part
+	{\renewcommand*{\TabLabel}{#2}\renewcommand*{\TabCaption}{#3}\tabfloat\begin{center}\begin{tabular}{#1}}
+	% END part
+	{\end{tabular}\end{center}\caption{\TabCaption\label{code:\TabLabel}}\endcodefloat}
+\newcommand{\TabRef}[1]{% {caption}
+	Table \ref{tab:#1}%
+	}
 
 %
 % Include floating figure
 %
-\newcommand{\Fig}[4]{%
-\begin{figure}[htb]%
-\begin{center}%
-\includegraphics[width=#2\textwidth]{#1.pdf}%
-\end{center}%
-\caption{#3\label{fig:#1}}%
-\end{figure}%
-}
-\newcommand{\FigRef}[1]{Figure \ref{fig:#1}}
+\newcommand{\Fig}[3]{% {filename of pdf}{zoom}{caption}
+	\begin{figure}[htb]%
+	\begin{center}%
+	\includegraphics[width=#2\textwidth]{#1.pdf}%
+	\end{center}%
+	\caption{#3\label{fig:#1}}%
+	\end{figure}%
+	}
+\newcommand{\FigRef}[1]{% {filename}
+	Figure \ref{fig:#1}%
+	}
+
+%
+% Include floating listing
+%
+\DeclareFloatingEnvironment[
+	fileext=loc,
+	listname=List of codes,
+	name=Listing,
+	placement=htp,
+	]{codefloat}
+% Temorary variables to allow newenvironment to access parameters from END part
+\newcommand*{\CodeLabel}{}
+\newcommand*{\CodeCaption}{}
+\newenvironment{code}[3]% {language}{label}{caption}
+	% BEGIN part
+	{\renewcommand*{\CodeLabel}{#2}\renewcommand*{\CodeCaption}{#3}\codefloat\hrulefill\minted{#1}}
+	% END part
+	{\endminted\caption{\CodeCaption\label{code:\CodeLabel}}\hrulefill\endcodefloat}
+\newcommand{\Code}[3]{% {filename}{language}{caption}
+	\codefloat\hrulefill%
+	\inputminted[tabsize=4]{#2}{#1}%
+	\caption{#3\label{code:#1}}\hrulefill\endcodefloat%
+	}
+\newcommand{\CodeRef}[1]{% {caption or filename}
+	Listing \ref{code:#1}%
+	}
 
 % Quotation marks
 \newcommand{\Q}[1]{``{#1}''}
@@ -111,11 +131,13 @@ Philipp Roebrock\\[1ex]
 
 \Section{theory}{Theory}
 
-% System categories: Linear, time-invariant, continous-time
+The systems we are modeling here are {\em linear time-invariant} ({\em LTI}) and
+{\em single-input single-output} ({\em SISO}) systems.
 
 \SubSection{diffeq}{Differential equation}
 
-Let the system be described by an $n$-th order {\em ordinary differential equation} ({\em ODE}):
+Let the system be described by an $n$-th order {\em ordinary differential
+equation} ({\em ODE}):
 \begin{eqnarray}
 a_{n}\,\frac{d^{n}y(t)}{dt^{n}}&+&a_{n-1}\,\frac{d^{n-1}y(t)}{dt^{n-1}}+\ldots+a_{1}\,\frac{dy(t)}{dt}+a_{0}\,y(t)=\nonumber\\
 b_{m}\,\frac{d^{m}u(t)}{dt^{m}}&+&b_{m-1}\,\frac{d^{m-1}u(t)}{dt^{m-1}}+\ldots+b_{1}\,\frac{du(t)}{dt}+b_{0}\,u(t)
@@ -149,6 +171,7 @@ The transfer function $G(s)$ is defined as
 \begin{equation}
 G(s):=\frac{y(s)}{u(s)}=\frac{b_{m}\,s^{m}+b_{m-1}\,s^{m-1}+\ldots+b_{1}\,s+b_{0}}{a_{n}\,s^{n}+a_{n-1}\,s^{n-1}+\ldots+a_{1}\,s+a_{0}}
 \end{equation}
+If $m\leq n$, the transfer function is called {\em proper}.
 
 \SubSection{sspace}{State space representation}
 
@@ -156,8 +179,8 @@ For a given linear system with $p\in\mathbb{N}$ inputs, $q\in\mathbb{N}$
 outputs and $n\in\mathbb{N}$ states, the system can be described by a set
 of equations:
 \begin{eqnarray}
-\Vec{\dot{x}}(t)&=&\Mat{A}(t)\,\Vec{x}(t)+\Mat{B}(t)\,\Vec{u}(t)\\
-\Vec{y}(t)&=&\Mat{C}(t)\,\Vec{x}(t)+\Mat{D}(t)\,\Vec{u}(t)
+\Vec{\dot{x}}(t)&=&\Mat{A}\,\Vec{x}(t)+\Mat{B}\,\Vec{u}(t)\\
+\Vec{y}(t)&=&\Mat{C}\,\Vec{x}(t)+\Mat{D}\,\Vec{u}(t)
 \end{eqnarray}
 where $\Vec{u}(t)\in\mathbb{R}^p$ is the {\em input vector},
 $\Vec{y}(t)\in\mathbb{R}^q$ the {\em output vector} and $\Vec{x}\in\mathbb{R}^n$
@@ -167,22 +190,16 @@ the {\em state matrix}, $\Mat{B}$ with $\dim(\Mat{B})=n\times p$ is the
 {\em output matrix}, $\Mat{D}$ with $\dim(\Mat{D})=q\times p$ is the
 {\em feedthrough matrix}.\\
 
-Typically we deal with {\em linear time invariant systems} ({\em LTI}) with 
-$\Mat{A}$, $\Mat{B}$, $\Mat{C}$ and $\Mat{D}$ independent on $t$:
-\begin{eqnarray}
-\Vec{\dot{x}}(t)&=&\Mat{A}\,\Vec{x}(t)+\Mat{B}\,\Vec{u}(t)\\
-\Vec{y}(t)&=&\Mat{C}\,\Vec{x}(t)+\Mat{D}\,\Vec{u}(t)
-\end{eqnarray}
-
 To see the block diagram representation of the state space equation, we refer
 to \FigRef{statespace}.\\
 
 \Fig{statespace}{0.8}{State space notation shown as block diagram}
 
-\SubSubSection{Canonical form}
+\SubSubSection{canonical}{Canonical representation.}
 
-For given differential equation like \ERef{ode} or transfer function like
-\ERef{xfer} the state space 
+For given transfer function like \ERef{xfer} that is proper, the state space
+representation can be expressed by so called {\em canonical representations}.
+The {\em controllable canonical form} is given by
 \begin{equation}
 \begin{array}{ll}
 \Mat{A}=\left(\begin{array}{ccccc}
@@ -190,7 +207,7 @@ For given differential equation like \ERef{ode} or transfer function like
 \vdots & \ddots & \ddots & \ddots & \vdots\\
 \vdots & & \ddots & \ddots & 0\\
 0 & \cdots & \cdots & 0 & 1\\
--a_0 & -a_1 & \cdots & -a_{n-1} & -a_n
+-\frac{a_0}{a_n} & -\frac{a_1}{a_n} & \cdots & -\frac{a_{n-2}}{a_n} & -\frac{a_{n-1}}{a_n}
 \end{array}\right)
 &
 \Mat{B}=\left(\begin{array}{c}
@@ -201,11 +218,11 @@ For given differential equation like \ERef{ode} or transfer function like
 1
 \end{array}\right)\\
 \Mat{C}=\left(\begin{array}{ccccc}
-b_0 & b_1 & \cdots & b_{n-1} & b_n
+\frac{a_n\,b_0-a_0\,b_n}{a_n^2} & \frac{a_n\,b_1-a_1\,b_n}{a_n^2} & \cdots & \frac{a_n\,b_{n-1}-a_{n-1}\,b_n}{a_n^2}
 \end{array}\right)
 &
 \Mat{D}=\left(\begin{array}{c}
-0
+\frac{b_n}{a_n}
 \end{array}\right)
 \end{array}
 \end{equation}
@@ -213,7 +230,7 @@ b_0 & b_1 & \cdots & b_{n-1} & b_n
 For a given state-space representation the transfer function can be calculated
 by
 \begin{equation}
-G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}\,B+D
+G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}\,\Mat{B}+\Mat{D}
 \end{equation}
 
 \SubSection{pulsestep}{Impulse and step response}
@@ -235,7 +252,7 @@ a step to its input and observe the output.
 
 \SubSection{simu}{Simulation}
 
-\inputminted[tabsize=4]{python}{simulate.py}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -298,12 +315,24 @@ internal state and position in $\unit{m}$, we get
 
 \SubSubSection{xferfuncA}{Transfer function}
 
+We determine the transfer function by Laplace-transforming the differential equation
 \begin{eqnarray}
 \ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)&=&\beta\,u(t)\\
 &\TransformVert&\nonumber\\
 s^2\,y(s)+2\,\zeta\,\omega_0\,s\,y(s)+\omega_0^2\,y(s)&=&\beta\,u(s)\\
 G(s)&=&\frac{y(s)}{u(s)}=\frac{\beta}{s^2+2\,\zeta\,\omega_0\,s+\omega_0^2}
 \end{eqnarray}
+
+To setup a system in Python using a transfer function see \CodeRef{xferFuncA}.
+
+\begin{code}{python}{xferFuncA}{Initialize system using transfer function}
+# Define physical constants
+m = 1.0 # Mass [kg]
+k = 0.8 # Spring constant [N/m]
+c = 0.3 # Damping constant [Ns/m]
+# Define the system
+sys = signal.lti([ 1 ], [ m, c, k ])
+\end{code}
 
 \SubSubSection{sspaceA}{State space representation}
 
@@ -337,6 +366,22 @@ Therefore we get with $p=1$, $q=1$ and $n=2$:
 \end{array}
 \end{equation}
 
+To setup a system in Python using a state space representation see \CodeRef{sspaceA}.
+
+\begin{code}{python}{sspaceA}{Initialize system using state-space representation}
+# Define physical constants
+m = 1.0 # Mass [kg]
+k = 0.8 # Spring constant [N/m]
+c = 0.3 # Damping constant [Ns/m]
+# Determine state space representation
+A = np.array([[ 0, 1 ], [ -k/m, -c/m ]])
+B = np.array([[ 0 ], [ 1 ]])
+C = np.array([ 1/m, 0 ])
+D = np.array([ 0 ])
+# Define the system
+sys = signal.lti(A, B, C, D)
+\end{code}
+
 \SubSubSection{pulsestepA}{Impulse and step response}
 
 For $\zeta=0$ (undamped) we get
@@ -352,11 +397,77 @@ h(t)&=&\beta\,t\,e^{-\omega_0\,t}\\
 a(t)&=&\frac{\beta}{\omega_0^2}\,\left(1-\left(1+t\,\omega_0\right)\,e^{-\omega_0\,t}\right)
 \end{eqnarray}
 
+\begin{code}{python}{pulseA}{Simulate the impulse response of a system}
+# Define system
+m = 1.0 # Mass [kg]
+k = 0.8 # Spring constant [N/m]
+c = 0.3 # Damping constant [Ns/m]
+sys = signal.lti([ 1 ], [ m, c, k ])
+# Time range
+n = 100+1
+t = np.linspace(0, 40, num=n)
+# Simulate
+T, yout = signal.step(sys, T=t)
+# Plot result
+plt.plot(T, yout)
+plt.grid()
+plt.xlabel('Time (s)')
+plt.ylabel('Output (m)')
+plt.show()
+\end{code}
+
+\Fig{step}{0.6}{Impulse response simulation result}
+
+
 \SubSubSection{simuA}{Simulation}
 
-% analytical solution
-% direct simulation, explaining ODE solver; python scipy simulation
-% system identification
+\begin{code}{python}{simuAcode}{Simulate a system}
+# Define system
+m = 1.0 # Mass [kg]
+k = 0.8 # Spring constant [N/m]
+c = 0.3 # Damping constant [Ns/m]
+sys = signal.lti([ 1 ], [ m, c, k ])
+# Time range
+n = 100+1
+t = np.linspace(0, 60, num=n)
+# Input
+U = np.zeros(n)
+U[np.where(t >= 30.0)] = 2.0
+# Simulate
+T, yout, xout = signal.lsim(sys, U, t, X0=np.array([ 1, 0 ]))
+# Plot result
+plt.plot(T, yout)
+plt.grid()
+plt.xlabel('Time (s)')
+plt.ylabel('Output (m)')
+plt.show()
+\end{code}
+
+\FigRef{simulate} shows the result of the simulation. The period time of the
+oscillation can be determined by
+\begin{eqnarray}
+T=\frac{2\,\pi}{\omega_0}=\frac{2\,\pi}{\sqrt{\frac{k}{m}}}=\frac{2\,\pi}{\sqrt{\frac{0.8}{1.0}}}\approx 7\unit{s}
+\end{eqnarray}
+which is about what we see in the figure. The initial state $x_0$ shows an
+initial speed of $1\unitfrac{m}{s}$. In an undamped system this would lead
+to an initial position change of
+\begin{eqnarray}
+\frac{1}{2}\,m\,\dot{x}_0^2=\frac{1}{2}\,k\,x^2\Leftrightarrow x=sqrt{\frac{m}{k}\,\dot{x}_0^2}\approx1.1\unit{m}.
+\end{eqnarray}
+For the simulation of the damped system this is less which is plausible.
+Without external input in the first $30\unit{s}$ the system shows damped
+oscillation around 0. With the external input set to $2\unit{N}$ there
+is another damped oscillation around a stable state of
+\begin{eqnarray}
+x=\frac{F}{k}=\frac{2}{0.8}=2.5\unit{m}.
+\end{eqnarray}
+
+\Fig{simulate}{1.0}{Simulation result}
+
+
+% TODO: analytical solution
+% TODO: direct simulation, explaining ODE solver; python scipy simulation
+% TODO: system identification
 
 \end{document}
 

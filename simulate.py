@@ -1,43 +1,32 @@
+import os
 import numpy as np
+from scipy import signal
 import matplotlib.pyplot as plt
-from scipy.integrate import odeint
+plt.rc('text', usetex=True)
+plt.rc('font', family='serif')
 
 # Parameters for mechanical oscillator
 m = 1.0 # Mass [kg]
 k = 0.8 # Spring constant [N/m]
 c = 0.3 # Damping constant [Ns/m]
 
-# State space matrices
-A = np.array([[ 0, 1 ], [ -k/m, -c/m ]])
-B = np.array([[ 0 ], [ 1 ]])
-C = np.array([ 1/m, 0 ])
-D = np.array([ 0 ])
+sys = signal.lti([ 1 ], [ m, c, k ])
 
-# Input function
-def u(t):
-	if t >= 30:
-		return np.array([ 2 ])
-	else:
-		return np.array([ 0 ])
-
-# Helper function for simulation
-def func(x, t):
-	result = np.dot(A, x) + np.dot(B, u(t))
-	return result
-
-# Start condition
-x0 = np.array([ 1, 0 ])
 # Time range
 n = 100+1
 t = np.linspace(0, 60, num=n)
-# Simulate system
-x = odeint(func, x0, t)
-# Calculate output
-y = np.array([ np.dot(C, x[i]) + np.dot(D, u(t[i])) for i in range(n) ])
+
+# Input
+U = np.zeros(n)
+U[np.where(t >= 30.0)] = 2.0
+
+# Simulate
+T, yout, xout = signal.lsim(sys, U, t, X0=np.array([ 1, 0 ]))
 
 # Plot result
-plt.plot(t, y)
+plt.plot(T, yout)
 plt.grid()
 plt.xlabel('Time (s)')
 plt.ylabel('Output (m)')
+plt.savefig(os.path.splitext(__file__)[0] + '.pdf')
 plt.show()
