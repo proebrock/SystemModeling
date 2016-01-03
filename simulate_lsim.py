@@ -9,7 +9,6 @@ plt.rc('font', family='serif')
 m = 1.0 # Mass [kg]
 k = 0.8 # Spring constant [N/m]
 c = 0.0 # Damping constant [Ns/m]
-
 sys = signal.lti([ 1 ], [ m, c, k ])
 
 # Time range
