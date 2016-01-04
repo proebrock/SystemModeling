@@ -32,7 +32,7 @@ y = odeint(sys, x0, t)
 
 # Plot result
 plt.plot(t, [ u(ti) for ti in t], label='Input $U(t)$')
-plt.plot(t, y[:,1], label='Output $y(t)$')
+plt.plot(t, y[:,0], label='Output $y(t)$')
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='upper left')
