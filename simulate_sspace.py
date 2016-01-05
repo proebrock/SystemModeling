@@ -15,21 +15,22 @@ t = np.linspace(0, 40, num=n)
 
 # Input
 def u(t):
-	return np.sin(np.sqrt(k / m) * t)
+	return np.array([np.sin(np.sqrt(k / m) * t)])
 
 # System
-def sys(y,t):
-	return np.array([ \
-		y[1], \
-		(- c * y[1] - k * y[0] + u(t)) / m \
-	])
+A = np.array([[ 0, 1 ], [ -k/m, -c/m ]])
+B = np.array([[ 0 ], [ 1 ]])
+C = np.array([ 1/m, 0 ])
+D = np.array([ 0 ])
+def sys(x, t):
+	return np.dot(A, x) + np.dot(B, u(t))
 
 # Initial condition
 x0 = np.array([ 0.0, 0.0 ])
 
 # Simulate system
-y = odeint(sys, x0, t)
-y = y[:,0]
+x = odeint(sys, x0, t)
+y = np.array([ np.dot(C, x[i]) + np.dot(D, u(t[i])) for i in range(n) ])
 
 # Plot result
 plt.plot(t, [ u(ti) for ti in t], label='Input $U(t)$')
