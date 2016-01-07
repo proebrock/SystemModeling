@@ -33,8 +33,8 @@ x = odeint(sys, x0, t)
 y = np.array([ np.dot(C, x[i]) + np.dot(D, u(t[i])) for i in range(n) ])
 
 # Plot result
-plt.plot(t, [ u(ti) for ti in t], label='Input $U(t)$')
-plt.plot(t, y, label='Output $y(t)$')
+plt.plot(t, [ u(ti) for ti in t], '-k', label='Input $U(t)$')
+plt.plot(t, y, '--b', label='Output $y(t)$')
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='upper left')

@@ -127,35 +127,35 @@ Philipp Roebrock\\[1ex]
 
 \Section{diffeq}{Differential equation}
 
-Let the system be described by an $n$-th order {\em ordinary differential
-equation} ({\em ODE}):
+A dynamical system can be described by an $n$-th order {\em ordinary differential
+equation} ({\em ODE})
 \begin{eqnarray}
 a_{n}\,\frac{d^{n}y(t)}{dt^{n}}&+&a_{n-1}\,\frac{d^{n-1}y(t)}{dt^{n-1}}+\ldots+a_{1}\,\frac{dy(t)}{dt}+a_{0}\,y(t)=\nonumber\\
 b_{m}\,\frac{d^{m}u(t)}{dt^{m}}&+&b_{m-1}\,\frac{d^{m-1}u(t)}{dt^{m-1}}+\ldots+b_{1}\,\frac{du(t)}{dt}+b_{0}\,u(t)
 \end{eqnarray}
-Or in a more compact notation:
+or the same written in a more compact notation
 \begin{eqnarray}
 \ELabel{ode}
 a_{n}\,y^{(n)}(t)&+&a_{n-1}\,y^{(n-1)}(t)+\ldots+a_{1}\,y'(t)+a_{0}\,y(t)=\nonumber\\
 b_{m}\,u^{(m)}(t)&+&b_{m-1}\,u^{(m-1)}(t)+\ldots+b_{1}\,u'(t)+b_{0}\,u(t)
 \end{eqnarray}
 
-An example for a so called {\em single-input single-output} ({\em SISO}) system
-we choose a driven damped harmonic oscillator which has this differential
-equation
+\paragraph{Example}
+
+An example for a dynamic system is the {\em driven damped harmonic oscillator}
+which has this differential equation
 \begin{equation}
+\ELabel{oscillatorode}
 \ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)=\beta\,u(t)
 \end{equation}
 with $\omega_0$ the angular frequency of the undamped oscillator in
 $\unitfrac{1}{s}$, $\zeta$ the damping ratio (no unit) and $\beta$ a
 conversion constant.\\
 
-\paragraph{Electrical oscillator}
-
-From the circuit diagram of a series RLC circuit (see \FigRef{elecoscil}) with
-an electrical resistance $R$ in $\unit{\Omega}=\unitfrac{V}{A}$, an inductance
-$L$ in $\unit{H}=\unitfrac{V\,s}{A}$ and a capacitance $C$ in
-$\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
+{\em Electrical oscillator}: From the circuit diagram of a series RLC circuit
+(see \FigRef{elecoscil}) with an electrical resistance $R$ in
+$\unit{\Omega}=\unitfrac{V}{A}$, an inductance $L$ in $\unit{H}=\unitfrac{V\,s}{A}$
+and a capacitance $C$ in $\unit{F}=\unitfrac{A\,s}{V}$ we can derive:
 \begin{eqnarray}
 U_{In}(t)&=&L\,\frac{di(t)}{dt}+R\,i(t)+U_{Out}(t)\\
 U_{Out}(t)&=&\frac{1}{C}\int i(t)dt\quad\Leftrightarrow\quad i(t)=C\,\frac{dU_{Out}(t)}{dt},\,\frac{di(t)}{dt}=C\,\frac{d^2U_{Out}(t)}{dt^2}\\
@@ -171,11 +171,10 @@ representing internal state and output voltage in $\unit{V}$, we get
 \omega_0^2=\pfrac{1}{L\,C},\quad2\,\zeta\,\omega_0=\pfrac{R}{L},\quad\beta=\pfrac{1}{L\,C}
 \end{equation}
 
-\paragraph{Mechanical oscillator}
-
-From the setup of a damped spring mass system (see \FigRef{mechoscil}) with a
-mass $m$ in $\unit{kg}$, a spring constant $k$ in $\unitfrac{N}{m}$ and a
-viscous damping coefficient $c$ in $\unitfrac{N\cdot s}{m}$ we can derive:
+{\em Mechanical oscillator}: From the setup of a damped spring mass system
+(see \FigRef{mechoscil}) with a mass $m$ in $\unit{kg}$, a spring constant $k$
+in $\unitfrac{N}{m}$ and a viscous damping coefficient $c$ in
+$\unitfrac{N\cdot s}{m}$ we can derive:
 \begin{eqnarray}
 F(t)&=&m\,\frac{d^2p(t)}{dt^2}+c\,\frac{dp(t)}{dt}+k\,p(t)\\
 \frac{1}{m}\,F(t)&=&\frac{d^2p(t)}{dt^2}+\frac{c}{m}\,\frac{dp(t)}{dt}+\frac{k}{m}\,p(t)\\
@@ -193,7 +192,8 @@ internal state and position in $\unit{m}$, we get
 
 \Section{xferfunc}{Transfer function}
 
-The bilateral {\em Laplace transformation} of a function $f(t)$ is defined as
+Basis of the {\em transfer function} is the bilateral {\em Laplace
+transformation} of a function $f(t)$ which is defined as
 \begin{eqnarray}
 F(s)=\mathcal{L}\left\{f(t)\right\}=\int\limits_{-\infty}^{\infty}f(t)\,e^{-s\,t}\,dt\qquad\forall\,t\geq0
 \end{eqnarray}
@@ -215,7 +215,10 @@ G(s):=\frac{y(s)}{u(s)}=\frac{b_{m}\,s^{m}+b_{m-1}\,s^{m-1}+\ldots+b_{1}\,s+b_{0
 \end{equation}
 If $m\leq n$, the transfer function is called {\em proper}.\\
 
-We determine the transfer function by Laplace-transforming the differential equation
+\paragraph{Example}
+
+To determine the transfer function of the harmonic oscillator we
+Laplace-transform the differential equation \ERef{oscillatorode}
 \begin{eqnarray}
 \ddot{y}(t)+2\,\zeta\,\omega_0\,\dot{y}(t)+\omega_0^2\,y(t)&=&\beta\,u(t)\\
 &\TransformVert&\nonumber\\
@@ -223,11 +226,12 @@ s^2\,y(s)+2\,\zeta\,\omega_0\,s\,y(s)+\omega_0^2\,y(s)&=&\beta\,u(s)\\
 G(s)&=&\frac{y(s)}{u(s)}=\frac{\beta}{s^2+2\,\zeta\,\omega_0\,s+\omega_0^2}
 \end{eqnarray}
 
-To setup a system in Python using a transfer function you just do
+To define the mechanical oscillator in Python with the transfer function
+\begin{equation}
+G(s)=\frac{1}{m\,s^2+c\,s+k}
+\end{equation}
+we just write
 \begin{minted}{python}
-m = 1.0 # Mass [kg]
-k = 0.8 # Spring constant [N/m]
-c = 0.3 # Damping constant [Ns/m]
 sys = signal.lti([ 1 ], [ m, c, k ])
 \end{minted}
 
@@ -252,8 +256,6 @@ To see the block diagram representation of the state space equation, we refer
 to \FigRef{statespace}.\\
 
 \Fig{statespace}{0.8}{State space notation shown as block diagram}
-
-\SubSection{canonical}{Canonical representation.}
 
 For given transfer function like \ERef{xfer} that is proper, the state space
 representation can be expressed by so called {\em canonical representations}.
@@ -291,8 +293,11 @@ by
 G(s)=\Mat{C}\,\left(s\,\Mat{I}-\Mat{A}\right)^{-1}\,\Mat{B}+\Mat{D}
 \end{equation}
 
-We do a transformation by setting $x_1(t):=y(t)$ and $x_2(t):=\dot{y}(t)$. This
-gives:
+\paragraph{Example}
+
+We tranform the differential equation of the harmonic oscillator
+\ERef{oscillatorode} by setting $x_1(t):=y(t)$ and $x_2(t):=\dot{y}(t)$.
+This gives:
 \begin{eqnarray}
 	\dot{x_1}(t)&=&x_2(t)\\
 	\dot{x_2}(t)&=&-2\,\zeta\,\omega_0\,x_2(t)-\omega_0^2\,x_1(t)+\beta\,u(t)
@@ -321,15 +326,8 @@ Therefore we get with $p=1$, $q=1$ and $n=2$:
 \end{array}
 \end{equation}
 
-To setup a system in Python using a state space representation you just do
+To define a system in Python given in state space representation we just
 \begin{minted}{python}
-m = 1.0 # Mass [kg]
-k = 0.8 # Spring constant [N/m]
-c = 0.3 # Damping constant [Ns/m]
-A = np.array([[ 0, 1 ], [ -k/m, -c/m ]])
-B = np.array([[ 0 ], [ 1 ]])
-C = np.array([ 1/m, 0 ])
-D = np.array([ 0 ])
 sys = signal.lti(A, B, C, D)
 \end{minted}
 
@@ -346,9 +344,11 @@ function $H(t)$ we get
 \begin{equation}
 a(t)=\mathcal{L}^{-1}\left\{\frac{G(s)}{s}\right\}
 \end{equation}
-Impulse and step responses are important as basic properties of a system. On
-the other way around it is possible to identify an unknown system by applying
-a step to its input and observe the output.\\
+Impulse and step responses are important as basic properties of a system
+telling you much about its behavior. It is possible to identify an unknown
+system by applying a step to its input and observe the output.\\
+
+\paragraph{Example}
 
 For the harmonic oscillator and $\zeta=0$ (undamped) we get
 \begin{eqnarray}

@@ -20,7 +20,7 @@ t = np.linspace(0, 40, num=n)
 T, yout = signal.step(sys, T=t)
 
 # Plot result
-plt.plot(T, yout)
+plt.plot(T, yout, '-k')
 plt.grid()
 plt.xlabel('Time (s)')
 plt.ylabel('Output (m)')

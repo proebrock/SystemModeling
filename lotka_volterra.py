@@ -28,8 +28,8 @@ x0 = np.array([ 50.0, 10.0 ])
 y = odeint(sys, x0, t)
 
 # Plot result
-plt.plot(t, y[:,0], label='Prey count')
-plt.plot(t, y[:,1], label='Predator count')
+plt.plot(t, y[:,0], '-k', label='Prey count')
+plt.plot(t, y[:,1], '--b', label='Predator count')
 plt.grid()
 plt.xlabel('Time')
 plt.ylim(0, 60)

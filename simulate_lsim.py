@@ -26,8 +26,8 @@ x0 = np.array([ 0.0, 0.0 ])
 T, y, x = signal.lsim(sys, u, t, X0=x0)
 
 # Plot result
-plt.plot(T, u, label='Input $U(t)$')
-plt.plot(T, y, label='Output $y(t)$')
+plt.plot(T, u, '-k', label='Input $U(t)$')
+plt.plot(T, y, '--b', label='Output $y(t)$')
 plt.grid()
 plt.xlabel('Time (s)')
 plt.legend(loc='upper left')
